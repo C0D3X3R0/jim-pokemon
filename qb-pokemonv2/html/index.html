@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="reset.css" type="text/css">
+        <link rel="stylesheet" href="index.css" type="text/css">
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <script src="./index.js" type="text/javascript"></script>
+	</head>
+
+		<style>
+
+		.top {
+			margin: 0;
+		  position: absolute;
+		  top: 10%;
+			right: 34%;
+		}
+
+		.vertical-center {
+		  margin: 0;
+		  position: absolute;
+		  top: 30%;
+			right: 19%;
+
+		}
+
+		.bottom {
+		  margin: 0;
+		  position: absolute;
+		  bottom: 0%;
+			right: 0%;
+		}
+</style>
+	<body>
+		</style>
+		<div id="container">
+			<div class='top'>
+				</div>
+            <form id="form">
+						<div class='bottom'>
+<div id="card" >
+        <div class="front"> 
+            <img src="backcard.png" >
+        </div> 
+        <div class="back">
+            <img src="frontcard.png" id="thecard" data-tilt>
+        </div> 
+</div> 
+
+
+    <script src="https://unpkg.com/tilt.js@1.2.1/dest/tilt.jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+    <script>
+        $(function(){
+            $("#card").flip();
+        });
+
+        
+    </script>
+            </form>
+						</div>
+		</div>
+        
+        <script src="https://unpkg.com/tilt.js@1.2.1/dest/tilt.jquery.min.js"></script>
+	</body>
+</html>
+
