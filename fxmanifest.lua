@@ -4,22 +4,7 @@ description "Enhanced by Jimathy"
 fx_version "cerulean"
 game "gta5"
 
-
-client_scripts {
-    '@menuv/menuv.lua',
-    'client.lua',
-	'gl_client.lua',
-    'config.lua'
-}
-
-server_script {
-    'server.lua',
-	'gl_server.lua'
-}
-
-server_script "config.lua"
-
-ui_page "html/index.html"
+ui_page 'ui/ui.html'
 
 files {
 	'ui/ui.html',
@@ -31,6 +16,19 @@ files {
 	"html/index.css",
 	"html/reset.css",
 	"html/bttn.min.css",
-	"html/*.png",
-	"html/*.gif"
+	'html/*.png',
+	'html/*.gif'
 }
+
+client_scripts {
+    '@menuv/menuv.lua',
+    'client.lua',
+	'gl_client.lua',
+    'config.lua'
+}
+server_script {
+    'server.lua',
+	'gl_server.lua'
+}
+server_script "config.lua"
+

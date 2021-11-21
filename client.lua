@@ -128,16 +128,30 @@ end)
 RegisterNetEvent("Cards:client:UseBox")
 AddEventHandler("Cards:client:UseBox", function()
     TaskPlayAnim(PlayerPedId(), "clothingshirt", "try_shirt_positive_d", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+    --print('Box is Opening')
+    --QBCore.Functions.Notify("Box is being opened...", "error")
     QBCore.Functions.Progressbar("use_bag", "Box is being opened", 5000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        TriggerServerEvent("inventory:server:OpenInventory", "pokeBox", "poke_"..QBCore.Functions.GetPlayerData().citizenid)
+        local RLBagData = {
+            outfitData = {
+                ["bag"]   = { item = 41, texture = 0},  -- Nek / Das
+            }
+        }
+        --TriggerEvent('qb-clothing:client:loadOutfit', RallyBagData)
+        --TriggerNetEvent('inventory:client:close')
+        --Citizen.Wait(1500)
+        TriggerServerEvent("inventory:server:OpenInventory", "pokeBox", "poke_"..QBCore.Functions.GetPlayerData().citizenid, {
+            maxweight = 0,
+            slots = 170,
+        })
         TriggerEvent("inventory:client:SetCurrentStash", "poke_"..QBCore.Functions.GetPlayerData().citizenid)
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "invbag", 0.5)
         TaskPlayAnim(ped, "clothingshirt", "exit", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+        --QBCore.Functions.Notify("Box has been opened successfully", "success")
     end)
 end)
 
@@ -150,6 +164,15 @@ AddEventHandler("Cards:client:UseBadgeBox", function()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        local RLBagData = {
+            outfitData = {
+                ["bag"]   = { item = 41, texture = 0},  -- Nek / Das
+            }
+        }
+        TriggerServerEvent("inventory:server:OpenInventory", "pokeBox", "badge_"..QBCore.Functions.GetPlayerData().citizenid, {
+            maxweight = 0,
+            slots = 8,
+        })
         TriggerEvent("inventory:client:SetCurrentStash", "badge_"..QBCore.Functions.GetPlayerData().citizenid)
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "invbag", 0.5)
         TaskPlayAnim(ped, "clothingshirt", "exit", 8.0, 1.0, -1, 49, 0, 0, 0, 0)
@@ -215,91 +238,6 @@ menu_button:On('select', function(item)
     end)
 end)
 
--- NUI STUFF --
-
-RegisterNetEvent('gl-cards:openPackClient')
-AddEventHandler('gl-cards:openPackClient',function(picture)
-    SetDisplay(not display,picture)
-end)
-
-RegisterNetEvent('gl-cards:sendServer')
-AddEventHandler('gl-cards:sendServer',function()
-    TriggerServerEvent('gl-cards:openPack')
-end)
-
-
-RegisterNetEvent('gl-cards:displayCard')
-AddEventHandler('gl-cards:displayCard',function(card)
-    SetDisplayCard(not display,card..'.png')
-    --local player, distance = GetClosestPlayer()
-    --if distance ~= -1 and distance <= 3.0 then
-      --TriggerServerEvent('gl-cards:showPlayer', GetPlayerServerId(PlayerId()), GetPlayerServerId(player),card..'.png')
-    --end
-end)
-
-RegisterNetEvent('gl-cards:drawNui')
-AddEventHandler('gl-cards:drawNui',function(card)
-    SetDisplayCard(not display,card)
-    Wait(10000)
-    SetDisplay(false)
-end)
-
---very important cb 
-RegisterNUICallback("exit", function(data)
-    SetDisplay(false)
-    return
-end)
-
--- this cb is used as the main route to transfer data back 
--- and also where we hanld the data sent from js
-RegisterNUICallback("main", function(data)
-    SetDisplay(false)
-    return
-end)
-
-RegisterNUICallback("error", function(data)
-    SetDisplay(false)
-end)
-
-
-function SetDisplay(bool,card)
-    display = bool
-    SetNuiFocus(bool, bool)
-    SendNUIMessage({
-        type = "ui",
-        status = bool,
-        card = card
-    })
-end
-
-function SetDisplayCard(bool,card)
-    display = bool
-    SetNuiFocus(bool, bool)
-    SendNUIMessage({
-        type = "display",
-        status = bool,
-        card = card
-    })
-end
-
-Citizen.CreateThread(function()
-    while display do
-        Citizen.Wait(0)
-        -- https://runtime.fivem.net/doc/natives/#_0xFE99B66D079CF6BC
-        --[[ 
-            inputGroup -- integer , 
-            control --integer , 
-            disable -- boolean 
-        ]]
-        DisableControlAction(0, 1, display) -- LookLeftRight
-        DisableControlAction(0, 2, display) -- LookUpDown
-        DisableControlAction(0, 142, display) -- MeleeAttackAlternate
-        DisableControlAction(0, 18, display) -- Enter
-        DisableControlAction(0, 322, display) -- ESC
-        DisableControlAction(0, 106, display) -- VehicleMouseControlOverride
-    end
-end)
-
 RegisterNetEvent('Cards:view', function(nui)
     SetNuiFocusKeepInput(true)
     SetNuiFocus(true,false)
@@ -307,8 +245,8 @@ RegisterNetEvent('Cards:view', function(nui)
         nui = nui,
         --information = info
     })
-	Wait(10000)
-	SetNuiFocus(false)
+    Wait(5000)
+    SetDisplay(false)
 end)
 
 RegisterNUICallback("escape", function()
